@@ -1,0 +1,15 @@
+export const supportMimes = [
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/gif",
+    "image/bmp",
+    "image/webp",
+    "image/svg+xml",
+    "image/tiff",
+    "image/x-icon",
+    "image/vnd.microsoft.icon",
+    "image/vnd.wap.wbmp",
+    "image/heic",
+    "image/heif",
+];

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('../partials/head') %>
+  <body>
+    <div class="container">
+      <p>Hi <%= name %></p>
+      <p>Please click below link to verify your email</p>
+      <a href="<%= domain %>/verify-email?email=<%- email %>&token=<%- token %>">Verify Email</a>
+        <p>or copy below link and paste in your browser</p>
+        <p><%= domain %>/verify-email?email=<%- email %>&token=<%- token %></p>
+      <p>if you have any query then let us know , we are happy to help you</p>
+      <%- include('../partials/footer') %>
+    </div>
+  </body>
+</html>
