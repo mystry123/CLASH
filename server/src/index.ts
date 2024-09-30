@@ -6,13 +6,26 @@ import cors from "cors";
 import Routes from "./routes/index";
 import fileUpload from "express-fileupload";
 import { appLimiter } from "./config/rateLimit";
+import { Server } from "socket.io";
+import { setupSocket } from "./socket";
+import helmet from "helmet";
+import { createServer, Server as HttpServer } from "http";
 
 const app: Application = express();
+const server: HttpServer = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_APP_URL,
+  },
+});
 
+export { io };
+setupSocket(io);
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
+app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(appLimiter);
 app.use(
@@ -52,6 +65,6 @@ app.get("/home", (req: Request, res: Response) => {
 
 import "./jobs/index";
 import { emailQueue } from "./jobs/emailJobs";
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

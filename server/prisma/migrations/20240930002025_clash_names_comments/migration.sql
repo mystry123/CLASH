@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "ClashItem" ALTER COLUMN "title" SET DATA TYPE TEXT;

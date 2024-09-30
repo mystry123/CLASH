@@ -9,7 +9,7 @@ const router = Router();
 router.use('/api/auth', authRoutes);
 router.use('/', verifyRoutes);
 router.use('/api/auth', passwordRoutes);
-router.use('/api/takkle',authMiddleware, clashRoutes);
+router.use('/api/clash', clashRoutes);
 
 
 export default router;  // Export the router to be used in other files

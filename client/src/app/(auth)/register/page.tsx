@@ -1,8 +1,17 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import Register from "@/components/auth/Register";
+import { getServerSession } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function page() {
+export default async function page() {
+  const session = await getServerSession(authOptions);
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-[550px] bg-white rounded-xl px-10 py-5 shadow-md">
@@ -12,7 +21,7 @@ export default function page() {
         >
           Signup
         </h1>
-        <Register/>
+        <Register />
         <p className="mt-4 text-center">
           Already have an account?{" "}
           <Link href="/login" className="text-blue-500 hover:underline">

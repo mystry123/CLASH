@@ -13,7 +13,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import axios, { AxiosError } from "axios";
@@ -23,11 +23,28 @@ import {
   CustomUser,
 } from "@/app/api/auth/[...nextauth]/options";
 import { toast } from "sonner";
+import { clearCache } from "@/actions/commonActions";
+import dashboard from "@/app/dashboard/page";
 
-export default function EditClash({ user }: { user: CustomUser }) {
-  const [open, setOpen] = useState(false);
-  const [clashData, setClashData] = useState<ClashFormTypes>({});
-  const [date, setDate] = React.useState<Date | null>();
+export default function EditClash({
+  token,
+  clash,
+  open,
+  setOpen,
+}: {
+  token: string;
+  clash: ClashTypes; 
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const [clashData, setClashData] = useState<ClashFormTypes>({
+    title: clash.title,
+    description: clash.description,
+  });
+  console.log("date",clash.expires_at)
+  const [date, setDate] = React.useState<Date | null>(
+    new Date(clash.expires_at)
+  );
   const [image, setImage] = React.useState<File | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [errors, setErrors] = useState<ClashFormTypesError>({});
@@ -50,17 +67,18 @@ export default function EditClash({ user }: { user: CustomUser }) {
       if (image) {
         formData.append("image", image);
       }
-      const { data } = await axios.post(TAKKLE_URL, formData, {
+      const { data } = await axios.put(`${TAKKLE_URL}/${clash.id}`, formData, {
         headers: {
-          Authorization: user.token,
+          Authorization: token,
         },
       });
       setLoading(false);
       if (data?.message) {
+        clearCache('dashboard');
         setClashData({});
         setDate(null);
         setImage(null);
-        toast.success("Takkle created Successfully");
+        toast.success("Takkle Updated Successfully");
         setOpen(false);
         setErrors({});
       }
@@ -153,7 +171,9 @@ export default function EditClash({ user }: { user: CustomUser }) {
                   <Calendar
                     mode="single"
                     selected={date || new Date()}
-                    onSelect={setDate}
+                    onSelect={(date) => {
+                      setDate(date!);
+                    }}
                     initialFocus
                   />
                 </PopoverContent>

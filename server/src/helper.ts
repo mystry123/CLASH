@@ -44,7 +44,7 @@ export const bytesToMB = (bytes: number): number => {
   return bytes / (1024 * 1024);
 };
 
-export const uploadFile = async (image: UploadedFile): Promise<string> => {
+export const uploadFile = (image: UploadedFile): string => {
   const imageExt = image.name.split(".").pop();
   const imageName = `${uuid4()}.${imageExt}`;
   const uploadedPath = process.cwd() + "/public/uploads/" + imageName;
@@ -62,6 +62,6 @@ export const deleteFile = async (filename: string) => {
   const filePath = process.cwd() + "/public/uploads/" + filename;
 
   if (fs.existsSync(filePath)) {
-     fs.unlinkSync(filePath);
+    fs.unlinkSync(filePath);
   }
 };
